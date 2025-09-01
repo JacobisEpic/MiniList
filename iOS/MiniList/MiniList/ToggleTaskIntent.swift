@@ -1,0 +1,24 @@
+//
+//  ToggleTaskIntent.swift
+//  MiniList
+//
+//  Created by Jacob Chin on 9/1/25.
+//
+
+import AppIntents
+import WidgetKit
+
+struct ToggleTaskIntent: AppIntent {
+    static var title: LocalizedStringResource = "Toggle Task"
+    static var description = IntentDescription("Toggle a MiniList task in Notion")
+
+    @Parameter(title: "Task ID") var taskId: String
+    @Parameter(title: "Currently Done") var done: Bool
+
+    func perform() async throws -> some IntentResult {
+        await MiniListAPI.toggleTask(id: taskId, currentlyDone: done)
+        // Ask WidgetKit to refresh after the change
+        WidgetCenter.shared.reloadTimelines(ofKind: "MiniListWidget")
+        return .result()
+    }
+}
