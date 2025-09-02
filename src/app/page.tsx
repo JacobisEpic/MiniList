@@ -21,8 +21,8 @@ async function api<T>(url: string, opts?: RequestInit): Promise<T> {
 type UiItem = {
   id: string;
   title: string;
-  uiDone: boolean; // UI state mirrors server "done" but we update optimistically
-  order: number;   // stable original order for sorting
+  uiDone: boolean; // mirrors server, updated optimistically
+  order: number;   // stable initial order
 };
 
 export default function Home() {
@@ -51,7 +51,7 @@ export default function Home() {
   }, [today]);
 
   function sortForView(list: UiItem[]) {
-    // Incomplete first (original order), then completed (original order)
+    // Incomplete first (keep original order), then completed (keep original order)
     return [...list].sort((a, b) => {
       if (a.uiDone === b.uiDone) return a.order - b.order;
       return a.uiDone ? 1 : -1;
@@ -59,59 +59,58 @@ export default function Home() {
   }
 
   async function toggleDone(it: UiItem) {
-    // optimistic UI update: flip local state + reorder
     const prev = items;
     const next = sortForView(
       items.map((x) => (x.id === it.id ? { ...x, uiDone: !x.uiDone } : x))
     );
-    setItems(next);
+    setItems(next); // optimistic UI
 
     try {
-      // persist to Notion (server will update checkbox property)
       await api<{ task: Task }>("/api/tasks", {
         method: "PATCH",
         body: JSON.stringify({ id: it.id, done: !it.uiDone }),
       });
-      // no-op: we already updated UI
     } catch (e: any) {
-      // rollback on error
-      setItems(prev);
-      setErr(
-        typeof e === "string"
-          ? e
-          : e?.message ?? "Failed to update task in Notion"
-      );
+      setItems(prev); // rollback
+      setErr(typeof e === "string" ? e : e?.message ?? "Failed to update task");
     }
   }
 
   return (
-    <main className="mx-auto max-w-md p-6">
-      {err && <p className="text-sm text-red-600 mb-3">{err}</p>}
+    <main className="min-h-screen flex items-center justify-center p-6">
+      <div className="w-full max-w-md">
+        {err && <p className="text-center text-sm text-red-600 mb-3">{err}</p>}
 
-      {loading ? (
-        <p className="text-gray-500">Loading…</p>
-      ) : items.length === 0 ? (
-        <p className="text-gray-500">No tasks due today.</p>
-      ) : (
-        <ul className="select-none">
-          {items.map((it) => (
-            <li key={it.id} className="mb-2 last:mb-0">
-              <button
-                onClick={() => toggleDone(it)}
-                className={[
-                  "text-left w-full leading-7 transition-colors",
-                  it.uiDone
-                    ? "line-through text-gray-400"
-                    : "text-black font-medium",
-                ].join(" ")}
-                aria-pressed={it.uiDone}
-              >
-                {it.title}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+        {loading ? (
+          <p className="text-center text-gray-500">Loading…</p>
+        ) : items.length === 0 ? (
+          <p className="text-center text-gray-500">No tasks due today.</p>
+        ) : (
+          <ul className="select-none text-center">
+            {items.map((it) => (
+              <li key={it.id} className="mb-2 last:mb-0">
+                <button
+                  onClick={() => toggleDone(it)}
+                  className="block w-full px-2 py-1"
+                  aria-pressed={it.uiDone}
+                  data-done={it.uiDone ? "true" : "false"}
+                >
+                  {/* Strike-through on the span to avoid button resets */}
+                  <span
+                    className={
+                      it.uiDone
+                        ? "leading-7 line-through decoration-gray-400 decoration-2 text-gray-400"
+                        : "leading-7 font-medium text-gray-900"
+                    }
+                  >
+                    {it.title}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </main>
   );
 }
