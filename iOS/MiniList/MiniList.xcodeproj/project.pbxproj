@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1695F1592E6626150052692D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1695F1582E6626150052692D /* WidgetKit.framework */; };
-		1695F15B2E6626150052692D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1695F15A2E6626150052692D /* SwiftUI.framework */; };
-		1695F16C2E6626160052692D /* MiniListWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1695F1562E6626150052692D /* MiniListWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		16ADA4CD2E66945100062926 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1695F1582E6626150052692D /* WidgetKit.framework */; };
+		16ADA4CE2E66945100062926 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1695F15A2E6626150052692D /* SwiftUI.framework */; };
+		16ADA4DF2E66945200062926 /* MiniListWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 16ADA4CC2E66945100062926 /* MiniListWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,11 +27,11 @@
 			remoteGlobalIDString = 1695F1212E6624A70052692D;
 			remoteInfo = MiniList;
 		};
-		1695F16A2E6626160052692D /* PBXContainerItemProxy */ = {
+		16ADA4DD2E66945200062926 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1695F11A2E6624A70052692D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 1695F1552E6626150052692D;
+			remoteGlobalIDString = 16ADA4CB2E66945100062926;
 			remoteInfo = MiniListWidgetExtension;
 		};
 /* End PBXContainerItemProxy section */
@@ -43,7 +43,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				1695F16C2E6626160052692D /* MiniListWidgetExtension.appex in Embed Foundation Extensions */,
+				16ADA4DF2E66945200062926 /* MiniListWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -54,24 +54,36 @@
 		1695F1222E6624A70052692D /* MiniList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiniList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1695F12F2E6624A80052692D /* MiniListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MiniListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1695F1392E6624A80052692D /* MiniListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MiniListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1695F1562E6626150052692D /* MiniListWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MiniListWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1695F1582E6626150052692D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		1695F15A2E6626150052692D /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		16ADA4CC2E66945100062926 /* MiniListWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MiniListWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		1695F16D2E6626160052692D /* Exceptions for "MiniListWidget" folder in "MiniListWidgetExtension" target */ = {
+		16ADA4E02E66945200062926 /* Exceptions for "MiniListWidget" folder in "MiniListWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 1695F1552E6626150052692D /* MiniListWidgetExtension */;
+			target = 16ADA4CB2E66945100062926 /* MiniListWidgetExtension */;
+		};
+		16ADA4E52E66955800062926 /* Exceptions for "MiniList" folder in "MiniListWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				APITask.swift,
+				MiniListAPI.swift,
+				ToggleTaskIntent.swift,
+			);
+			target = 16ADA4CB2E66945100062926 /* MiniListWidgetExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		1695F1242E6624A70052692D /* MiniList */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				16ADA4E52E66955800062926 /* Exceptions for "MiniList" folder in "MiniListWidgetExtension" target */,
+			);
 			path = MiniList;
 			sourceTree = "<group>";
 		};
@@ -85,10 +97,10 @@
 			path = MiniListUITests;
 			sourceTree = "<group>";
 		};
-		1695F15C2E6626150052692D /* MiniListWidget */ = {
+		16ADA4CF2E66945100062926 /* MiniListWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				1695F16D2E6626160052692D /* Exceptions for "MiniListWidget" folder in "MiniListWidgetExtension" target */,
+				16ADA4E02E66945200062926 /* Exceptions for "MiniListWidget" folder in "MiniListWidgetExtension" target */,
 			);
 			path = MiniListWidget;
 			sourceTree = "<group>";
@@ -117,12 +129,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1695F1532E6626150052692D /* Frameworks */ = {
+		16ADA4C92E66945100062926 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1695F15B2E6626150052692D /* SwiftUI.framework in Frameworks */,
-				1695F1592E6626150052692D /* WidgetKit.framework in Frameworks */,
+				16ADA4CE2E66945100062926 /* SwiftUI.framework in Frameworks */,
+				16ADA4CD2E66945100062926 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,7 +147,7 @@
 				1695F1242E6624A70052692D /* MiniList */,
 				1695F1322E6624A80052692D /* MiniListTests */,
 				1695F13C2E6624A80052692D /* MiniListUITests */,
-				1695F15C2E6626150052692D /* MiniListWidget */,
+				16ADA4CF2E66945100062926 /* MiniListWidget */,
 				1695F1572E6626150052692D /* Frameworks */,
 				1695F1232E6624A70052692D /* Products */,
 			);
@@ -147,7 +159,7 @@
 				1695F1222E6624A70052692D /* MiniList.app */,
 				1695F12F2E6624A80052692D /* MiniListTests.xctest */,
 				1695F1392E6624A80052692D /* MiniListUITests.xctest */,
-				1695F1562E6626150052692D /* MiniListWidgetExtension.appex */,
+				16ADA4CC2E66945100062926 /* MiniListWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -176,7 +188,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				1695F16B2E6626160052692D /* PBXTargetDependency */,
+				16ADA4DE2E66945200062926 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				1695F1242E6624A70052692D /* MiniList */,
@@ -234,26 +246,26 @@
 			productReference = 1695F1392E6624A80052692D /* MiniListUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		1695F1552E6626150052692D /* MiniListWidgetExtension */ = {
+		16ADA4CB2E66945100062926 /* MiniListWidgetExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1695F16E2E6626160052692D /* Build configuration list for PBXNativeTarget "MiniListWidgetExtension" */;
+			buildConfigurationList = 16ADA4E12E66945200062926 /* Build configuration list for PBXNativeTarget "MiniListWidgetExtension" */;
 			buildPhases = (
-				1695F1522E6626150052692D /* Sources */,
-				1695F1532E6626150052692D /* Frameworks */,
-				1695F1542E6626150052692D /* Resources */,
+				16ADA4C82E66945100062926 /* Sources */,
+				16ADA4C92E66945100062926 /* Frameworks */,
+				16ADA4CA2E66945100062926 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				1695F15C2E6626150052692D /* MiniListWidget */,
+				16ADA4CF2E66945100062926 /* MiniListWidget */,
 			);
 			name = MiniListWidgetExtension;
 			packageProductDependencies = (
 			);
 			productName = MiniListWidgetExtension;
-			productReference = 1695F1562E6626150052692D /* MiniListWidgetExtension.appex */;
+			productReference = 16ADA4CC2E66945100062926 /* MiniListWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -277,7 +289,7 @@
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = 1695F1212E6624A70052692D;
 					};
-					1695F1552E6626150052692D = {
+					16ADA4CB2E66945100062926 = {
 						CreatedOnToolsVersion = 16.4;
 					};
 				};
@@ -299,7 +311,7 @@
 				1695F1212E6624A70052692D /* MiniList */,
 				1695F12E2E6624A80052692D /* MiniListTests */,
 				1695F1382E6624A80052692D /* MiniListUITests */,
-				1695F1552E6626150052692D /* MiniListWidgetExtension */,
+				16ADA4CB2E66945100062926 /* MiniListWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -326,7 +338,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1695F1542E6626150052692D /* Resources */ = {
+		16ADA4CA2E66945100062926 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -357,7 +369,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1695F1522E6626150052692D /* Sources */ = {
+		16ADA4C82E66945100062926 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -377,10 +389,10 @@
 			target = 1695F1212E6624A70052692D /* MiniList */;
 			targetProxy = 1695F13A2E6624A80052692D /* PBXContainerItemProxy */;
 		};
-		1695F16B2E6626160052692D /* PBXTargetDependency */ = {
+		16ADA4DE2E66945200062926 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1695F1552E6626150052692D /* MiniListWidgetExtension */;
-			targetProxy = 1695F16A2E6626160052692D /* PBXContainerItemProxy */;
+			target = 16ADA4CB2E66945100062926 /* MiniListWidgetExtension */;
+			targetProxy = 16ADA4DD2E66945200062926 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -634,7 +646,7 @@
 			};
 			name = Release;
 		};
-		1695F16F2E6626160052692D /* Debug */ = {
+		16ADA4E22E66945200062926 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -661,7 +673,7 @@
 			};
 			name = Debug;
 		};
-		1695F1702E6626160052692D /* Release */ = {
+		16ADA4E32E66945200062926 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -727,11 +739,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1695F16E2E6626160052692D /* Build configuration list for PBXNativeTarget "MiniListWidgetExtension" */ = {
+		16ADA4E12E66945200062926 /* Build configuration list for PBXNativeTarget "MiniListWidgetExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1695F16F2E6626160052692D /* Debug */,
-				1695F1702E6626160052692D /* Release */,
+				16ADA4E22E66945200062926 /* Debug */,
+				16ADA4E32E66945200062926 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

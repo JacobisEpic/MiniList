@@ -7,82 +7,111 @@
 
 import WidgetKit
 import SwiftUI
+import AppIntents
+import os
 
-struct Provider: AppIntentTimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationAppIntent())
-    }
+// MARK: - Entry
 
-    func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: configuration)
-    }
-    
-    func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
-        var entries: [SimpleEntry] = []
-
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, configuration: configuration)
-            entries.append(entry)
-        }
-
-        return Timeline(entries: entries, policy: .atEnd)
-    }
-
-//    func relevances() async -> WidgetRelevances<ConfigurationAppIntent> {
-//        // Generate a list containing the contexts this widget is relevant in.
-//    }
-}
-
-struct SimpleEntry: TimelineEntry {
+struct MiniListEntry: TimelineEntry {
     let date: Date
-    let configuration: ConfigurationAppIntent
+    let tasks: [APITask]
 }
 
-struct MiniListWidgetEntryView : View {
+// MARK: - Provider
+
+private let log = Logger(subsystem: "MiniListWidget", category: "Timeline")
+
+struct Provider: TimelineProvider {
+    func placeholder(in context: Context) -> MiniListEntry {
+        // Shown in the widget gallery / while loading
+        MiniListEntry(date: Date(), tasks: [
+            APITask(id: "1", title: "Write YouTube video script", done: false),
+            APITask(id: "2", title: "Write blog post", done: false),
+            APITask(id: "3", title: "Record interactive demo", done: false),
+            APITask(id: "4", title: "Create a Notion template", done: true),
+        ])
+    }
+
+    func getSnapshot(in context: Context, completion: @escaping (MiniListEntry) -> Void) {
+        // Keep snapshots instant & reliable (gallery/first add). Real data can load in timeline.
+        completion(placeholder(in: context))
+    }
+
+    func getTimeline(in context: Context, completion: @escaping (Timeline<MiniListEntry>) -> Void) {
+        Task {
+            // Fetch today’s tasks from your Next.js API on Vercel
+            let fetched = (try? await MiniListAPI.fetchTodayTasks()) ?? []
+            log.debug("Fetched \(fetched.count) tasks for timeline")
+
+            // Let the view decide how to show "no tasks" (don’t inject demo here)
+            let entry = MiniListEntry(date: Date(), tasks: fetched)
+
+            completion(Timeline(
+                entries: [entry],
+                policy: .after(Date().addingTimeInterval(15 * 60)) // refresh ~15m
+            ))
+        }
+    }
+}
+
+// MARK: - View
+
+struct MiniListWidgetEntryView: View {
     var entry: Provider.Entry
 
     var body: some View {
-        VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
+        let items = Array(entry.tasks.prefix(6))
 
-            Text("Favorite Emoji:")
-            Text(entry.configuration.favoriteEmoji)
+        VStack(alignment: .leading, spacing: 4) {
+            if items.isEmpty {
+                Text("No tasks today")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(items, id: \.id) { task in
+                    let weight: Font.Weight = task.done ? .regular : .semibold
+                    let color: Color = task.done ? .gray : .primary
+                    Button(intent: ToggleTaskIntent(taskId: task.id, done: task.done)) {
+                        Text(task.title)
+                            .font(.system(size: 14, weight: weight))
+                            .foregroundStyle(color)
+                            .strikethrough(task.done, color: .gray)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            Spacer(minLength: 0)
         }
+        .padding(12)
+        .containerBackground(.background, for: .widget)
     }
 }
+
+// MARK: - Widget
 
 struct MiniListWidget: Widget {
-    let kind: String = "MiniListWidget"
+    let kind = "MiniListWidget"
 
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
+        StaticConfiguration(kind: kind, provider: Provider()) { entry in
             MiniListWidgetEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
         }
+        .configurationDisplayName("MiniList")
+        .description("See and toggle today’s tasks.")
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
 
-extension ConfigurationAppIntent {
-    fileprivate static var smiley: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "😀"
-        return intent
-    }
-    
-    fileprivate static var starEyes: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "🤩"
-        return intent
-    }
-}
+// MARK: - Preview
 
+#if DEBUG
 #Preview(as: .systemSmall) {
     MiniListWidget()
 } timeline: {
-    SimpleEntry(date: .now, configuration: .smiley)
-    SimpleEntry(date: .now, configuration: .starEyes)
+    MiniListEntry(date: .init(), tasks: [
+        APITask(id: "1", title: "Write blog post", done: false),
+        APITask(id: "2", title: "Create a Notion template", done: true),
+    ])
 }
+#endif
