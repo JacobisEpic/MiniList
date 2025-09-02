@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "vercel-build": "next build"
   },
   "dependencies": {
     "@notionhq/client": "^4.0.2",
@@ -15,6 +16,7 @@
     "react-dom": "19.1.0"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.16",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -23,6 +25,10 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
     "tailwindcss": "^4",
+    "postcss": "^8.4.32",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=18.18 <23"
   }
 }
